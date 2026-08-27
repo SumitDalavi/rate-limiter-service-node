@@ -52,4 +52,18 @@ describe("Sliding Window Rate Limiter Service", () => {
     expect(res.status).toBe(429);
     expect(res.body.allowed).toBe(false);
   });
+
+  it("API should return 400 if missing apiKey or endpoint", async () => {
+    const res = await request(app).post("/check").send({ apiKey: "key1" });
+    expect(res.status).toBe(400);
+    expect(res.body.error).toBe("Missing apiKey or endpoint in body");
+  });
+
+  it("API should return 500 on internal errors", async () => {
+    // Force an error in the redis client
+    jest.spyOn(redisClient, "slidingWindowRateLimit" as any).mockRejectedValueOnce(new Error("Redis error"));
+    const res = await request(app).post("/check").send({ apiKey: "keyError", endpoint: "/api/v1/data" });
+    expect(res.status).toBe(500);
+    expect(res.body.error).toBe("Internal Server Error");
+  });
 });
