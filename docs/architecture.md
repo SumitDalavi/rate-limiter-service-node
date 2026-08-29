@@ -1,4 +1,5 @@
 # Architecture: Rate Limiter Service Node
+> Maturity: Functional Prototype
 
 ## Sliding Window Algorithm (Redis + Lua)
 
