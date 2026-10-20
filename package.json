@@ -1,6 +1,6 @@
 {
   "name": "rate-limiter-service-node",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "description": "Distributed Rate Limiter Service",
   "main": "dist/index.js",
   "scripts": {
