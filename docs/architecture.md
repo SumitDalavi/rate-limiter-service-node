@@ -34,3 +34,24 @@ Redis evaluates Lua scripts atomically, ensuring that the entire check-and-inser
 ### 2. Time Space Complexity
 - **Memory**: We store one timestamp (an 8-byte float in Redis) per request within the window. At 100 req/min, this is trivial. At 1M req/min, it could use substantial RAM. For massive scale, a "Sliding Window Log" might be replaced by a "Sliding Window Counter" or "Token Bucket" algorithm to save memory, but this implementation provides the highest accuracy.
 - **Time**: `ZREMRANGEBYSCORE` is O(log(N) + M) where M is the number of elements removed. Since we run this frequently, M is typically 0 or 1, making it highly efficient.
+
+## Progressive Credential Loading & Production Architecture (v0.2.0)
+
+This service implements the **Progressive Credential Loading (PCL)** pattern, decoupling development speed from external infrastructure provisioning:
+
+```mermaid
+graph LR
+    Env[Environment Credentials] -->|Detect Keys & URLs| Detector[Credential Detector]
+    Detector -->|No Credentials / Missing| Mock[Mock Mode Factory]
+    Detector -->|Valid Credentials Present| Live[Live Provider Factory]
+    Mock --> Runtime[Application Core & /health]
+    Live --> Runtime
+```
+
+### Core Architecture Components
+1. **Mode Detection Singleton:** Inspects environment configuration at boot time without hard crashes on missing secrets.
+2. **Dual-Mode Factory Wrappers:**
+   - **Storage / Cache:** In-process maps or SQLite `:memory:` transparently promote to managed Redis or PostgreSQL when connection strings are supplied.
+   - **AI Providers:** Deterministic heuristic generators and local embeddings transparently promote to live OpenAI, Anthropic, or Gemini API clients.
+3. **Hot-Reload & Dynamic TLS:** File watchers monitor mounted volume paths (Kubernetes ConfigMaps and Secrets) to update certificates and limit configs atomically without process restarts.
+4. **Health & Observability:** The `/health` endpoint exposes real-time runtime mode metadata (`mock` vs `live`) across all backing adapters.
