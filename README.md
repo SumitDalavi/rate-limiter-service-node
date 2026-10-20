@@ -1,6 +1,4 @@
-> **NOTE:** This repository is an archival lab or partial prototype. It is not actively maintained and should not be used as a reference for production-grade deployments or performance benchmarks.
-
-# Rate Limiter Service Node
+# Rate Limiter Service Node 🚦
 
 [![CI Pipeline](https://github.com/SumitDalavi/rate-limiter-service-node/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/SumitDalavi/rate-limiter-service-node/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/SumitDalavi/rate-limiter-service-node?color=0969da&label=release&logo=github)](https://github.com/SumitDalavi/rate-limiter-service-node/releases)
@@ -61,7 +59,7 @@ curl -X POST http://localhost:3000/check \
 npm test
 ```
 
-## Release & Security Verification
+## 🔒 Release & Security Verification
 
 The project includes an automated DevSecOps release pipeline (`.github/workflows/release.yml`) triggered on semantic version tags (`v*.*.*`).
 
@@ -75,10 +73,10 @@ Each release automatically:
 ### Verifying the Release
 ```bash
 # Verify release via GitHub CLI
-gh release view v0.1.0 --repo SumitDalavi/rate-limiter-service-node
+gh release view v0.2.0 --repo SumitDalavi/rate-limiter-service-node
 
 # Download and inspect SBOM
-gh release download v0.1.0 --repo SumitDalavi/rate-limiter-service-node --pattern "sbom.spdx.json"
+gh release download v0.2.0 --repo SumitDalavi/rate-limiter-service-node --pattern "sbom.spdx.json"
 cat sbom.spdx.json | jq .
 ```
 
@@ -107,9 +105,17 @@ Enterprise deployment with production-grade backends, security scans, and contai
 - **Production Orchestration:** Mount secrets via Kubernetes Secrets or cloud secret managers with atomic config reload support.
 - **Release Verification:** Checksums and SPDX SBOM available on [GitHub Releases](https://github.com/SumitDalavi/rate-limiter-service-node/releases).
 
-## Documentation
+## 📚 Documentation
 
 - [Architecture](docs/ARCHITECTURE.md)
 - [Runbook](docs/runbook.md)
 - [Decisions](docs/decisions.md)
 - [Changelog](docs/changelog.md)
+
+## 👨‍💻 Author
+
+**Sumit Dalavi** — Senior DevSecOps / Platform Engineer
+[GitHub](https://github.com/SumitDalavi) | [LinkedIn](https://in.linkedin.com/in/sumit-dalavi-762838129)
+
+---
+*Built with a focus on robust patterns, not toy demos.*
