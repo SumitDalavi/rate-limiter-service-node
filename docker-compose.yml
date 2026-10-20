@@ -5,13 +5,20 @@ services:
     build: .
     ports:
       - "3000:3000"
+    env_file:
+      - path: .env
+        required: false
     environment:
-      - REDIS_URL=redis://redis:6379
       - PORT=3000
-    depends_on:
-      - redis
 
+  # ── Tier 2 Companion Services (started via: docker compose --profile live up) ──
   redis:
     image: redis:7-alpine
+    profiles: ["live"]
     ports:
       - "6379:6379"
+    volumes:
+      - redisdata:/data
+
+volumes:
+  redisdata:
